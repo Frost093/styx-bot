@@ -1,1 +1,2 @@
 .env
+#under .env add / DISCORD_BOT = '##(your token here)##'
