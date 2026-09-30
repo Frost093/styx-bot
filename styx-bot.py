@@ -1,17 +1,16 @@
+from datetime import datetime, timezone
 import os
 import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv #fun tokens
-
 load_dotenv()
-
 TOKEN =  os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
-
 bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
+
 #var
 last_msg_author = {}
 last_msg_content = {}
@@ -34,12 +33,8 @@ async def on_message(message):
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user}')
-    embed=discord.Embed(
-        title="Bot Ready",
-        description="The bot is now online and ready to use.",
-        color=discord.Color.green()
-    )
-    await bot.get_channel(1554660919865385110).send(embed=embed)  # Send the embed to the main dev's channel
+    bot.launch_time = datetime.now(timezone.utc)
+    print(f'Current time: {bot.launch_time}')
 
 #commands
 def deny():
@@ -48,6 +43,21 @@ def deny():
         description="You do not have permission to use this command.",
         color=discord.Color.red()
     )
+@bot.command()
+async def uptime(ctx):
+    delta = datetime.now(timezone.utc) - bot.launch_time
+    if delta.days == 0:
+        delta = f"{delta.seconds//3600} hours, {(delta.seconds//60)%60} minutes, and {delta.seconds%60} seconds"
+    else:
+        delta = f"{delta.days} days, {delta.seconds//3600} hours, {(delta.seconds//60)%60} minutes, and {delta.seconds%60} seconds"
+    
+    embed = discord.Embed(
+        title="Bot Uptime",
+        description=f"{delta}",
+        color=discord.Color.blue()
+    )
+    await ctx.send(embed=embed)
+
 
 @bot.command()
 async def marco(ctx):  #basic ping
@@ -106,9 +116,7 @@ async def snipe(ctx): #snipes msgs so they cant be deleted (useful for moderatio
             )
     else:
         embed = deny()
-        deny()
 
     await ctx.send(embed=embed)
     
-
 bot.run(TOKEN)  # Hidden for security reasons
