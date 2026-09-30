@@ -1,1 +1,2 @@
 # styx-bot
+cool  bot
