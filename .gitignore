@@ -1,3 +1,4 @@
 .env
 #under .env add / DISCORD_BOT = '##(your token here)##'
 config.py
+__pycache__/
