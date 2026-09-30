@@ -39,8 +39,16 @@ async def on_ready():
         description="The bot is now online and ready to use.",
         color=discord.Color.green()
     )
+    await bot.get_channel(1554660919865385110).send(embed=embed)  # Send the embed to the main dev's channel
 
 #commands
+def deny():
+    return discord.Embed(
+        title="Access Denied",
+        description="You do not have permission to use this command.",
+        color=discord.Color.red()
+    )
+
 @bot.command()
 async def marco(ctx):  #basic ping
     await ctx.send("Polo!")
@@ -60,14 +68,10 @@ async def env(ctx): #test for env info
             description=f"Server: {server_name} \nLatency: {latency}ms\nTotal Members: {total_members}\nUser: {user_name}",
             color=discord.Color.blue()
         )
-        await ctx.send(embed=embed)
+        
     else:
-        embed = discord.Embed(
-            title="Access Denied",
-            description="You do not have permission to use this command.",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
+        embed = deny()
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def ping(ctx):
@@ -80,35 +84,31 @@ async def ping(ctx):
 
 @bot.command()
 async def snipe(ctx): #snipes msgs so they cant be deleted (useful for moderation)
+    FROST_DC_ID = 1206044443766034522 #main dev ##could  be swaped for owner, ctx.guild.owner##
+    JAHU_DC_ID = 1410475638879555675 #owner
     
     author = last_msg_author.get(ctx.channel.id)
     content = last_msg_content.get(ctx.channel.id)
     time = last_msg_time.get(ctx.channel.id)
 
-    if author and content:
-        embed = discord.Embed(
-            title="Sniped Message",
-            description=f"Author: {author.name} \nContent: {content} \nTime: {time}",
-            color=discord.Color.yellow()
-        )
-        await ctx.send(embed=embed)
+    if ctx.author.id  ==  FROST_DC_ID or ctx.author.id == JAHU_DC_ID:
+        if author and content:
+            embed = discord.Embed(
+                title="Sniped Message",
+                description=f"Author: {author.name} \nContent: {content} \nTime: {time}",
+                color=discord.Color.yellow()
+            )
+        else:
+            embed = discord.Embed(
+                title="No Sniped Message",
+                description="No message has been sniped in this channel.",
+                color=discord.Color.red()
+            )
     else:
-        embed = discord.Embed(
-            title="No Sniped Message",
-            description="No message has been sniped in this channel.",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
-@bot.command()
-async def makechannel(ctx, name: str):
-    guild = ctx.guild
-    # Creates a standard text channel using the name you typed
-    new_channel = await guild.create_text_channel(name)
-        
-    embed = discord.Embed(
-        description=f"🏗️ Successfully constructed new sector: {new_channel.mention}",
-        color=discord.Color.green()
-    )
+        embed = deny()
+        deny()
+
     await ctx.send(embed=embed)
+    
 
 bot.run(TOKEN)  # Hidden for security reasons
