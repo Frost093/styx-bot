@@ -34,5 +34,9 @@ class General(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def frat(self, ctx):
+        await ctx.send("Relax pal.")
+
 async def setup(bot):
     await bot.add_cog(General(bot))

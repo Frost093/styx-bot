@@ -1,3 +1,5 @@
 .env
 config.py
+
+#clean up
 __pycache__

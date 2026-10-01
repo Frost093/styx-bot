@@ -1,7 +1,8 @@
 import discord
+import datetime
+from config import DEV_IDS, DEV_ID
 from collections import defaultdict, deque
 from discord.ext import commands
-from config import DEV_IDS, DEV_ID
 
 class Admin(commands.Cog):
     def __init__(self, bot):
@@ -94,8 +95,11 @@ class Admin(commands.Cog):
         await ctx.author.send(embed=discord.Embed(
             title="Silently Deleted Messages",
             description=f"Deleted {len(deleted)} messages.",
+            
             color=discord.Color.red(),
         ))
+        log_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f'{log_timestamp} SRM     {ctx.author.name} deleted {len(deleted)} msgs') # log the srm
 
     @commands.command()
     async def perms(self, ctx):
