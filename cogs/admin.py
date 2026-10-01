@@ -1,10 +1,12 @@
 import discord
+from collections import defaultdict, deque
 from discord.ext import commands
-from config import DEV_IDS
+from config import DEV_IDS, DEV_ID
 
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.snipe_history = defaultdict(lambda: deque(maxlen=100))
         
         #fix to / AttributeError: 'Admin' object has no attribute 'last_msg_author'
         self.last_msg_author = {}
@@ -23,9 +25,9 @@ class Admin(commands.Cog):
         if message.author.bot:
             return
         if not message.content.startswith("!"):
-            self.last_msg_author[message.channel.id] = message.author
-            self.last_msg_content[message.channel.id] = message.content
-            self.last_msg_time[message.channel.id] = message.created_at
+            self.snipe_history[message.channel.id].appendleft(
+                (message.author, message.content)
+            )
 
     @commands.command()
     async def env(self, ctx):
@@ -45,19 +47,18 @@ class Admin(commands.Cog):
 
         await ctx.send(embed=embed)
     @commands.command()
-    async def snipe(self, ctx):
+    async def snipe(self, ctx, amount:int = 1):
         if ctx.author.id not in DEV_IDS:
             await ctx.send(embed=self.deny())
             return
 
-        author = self.last_msg_author.get(ctx.channel.id)
-        content = self.last_msg_content.get(ctx.channel.id)
-        time = self.last_msg_time.get(ctx.channel.id)
+        messages = self.snipe_history[ctx.channel.id]
 
-        if author and content:
+        if 1 <= amount <= len(messages):
+            author, content = messages[amount - 1]
             embed = discord.Embed(
                 title="Sniped Message",
-                description=f"Author: {author.name} \nContent: {content} \nTime: {time}",
+                description=f"Author: {author.name} \nContent: {content}",
                 color=discord.Color.yellow()
             )
         else:
@@ -95,6 +96,26 @@ class Admin(commands.Cog):
             description=f"Deleted {len(deleted)} messages.",
             color=discord.Color.red(),
         ))
+
+    @commands.command()
+    async def perms(self, ctx):
+        if ctx.author.id in DEV_IDS: 
+            dev_status = "✅"
+        else:
+            dev_status = "❌"
+            
+        if ctx.author.id == DEV_ID:
+            dev_id_status = "✅"
+        else:
+            dev_id_status = "❌"
+            
+        
+        embed = discord.Embed(
+            title="Permissions",
+            description=f'Username: {ctx.author.name}\n ID: {ctx.author.id}\n\nDEV_IDS: {dev_status}\nDEV_ID: {dev_id_status}',
+            color=discord.Color.blue()
+        )
+        await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Admin(bot))
