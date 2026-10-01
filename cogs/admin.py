@@ -68,5 +68,33 @@ class Admin(commands.Cog):
             )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def rm(self, ctx, amount:int = 1):
+        if ctx.author.id not in DEV_IDS:
+            await ctx.send(embed=self.deny())
+            return
+
+        await ctx.message.delete()
+        deleted = await ctx.channel.purge(limit=amount)
+        await ctx.send(embed=discord.Embed(
+            title="Messages Deleted",
+            description=f"Deleted {len(deleted)} messages.",
+            color=discord.Color.green()
+        ))
+
+    @commands.command()
+    async def srm(self, ctx, amount:int = 1):
+        if ctx.author.id not in DEV_IDS:
+            await ctx.send(embed=self.deny())
+            return
+        
+        await ctx.message.delete()
+        deleted = await ctx.channel.purge(limit=amount)
+        await ctx.author.send(embed=discord.Embed(
+            title="Silently Deleted Messages",
+            description=f"Deleted {len(deleted)} messages.",
+            color=discord.Color.red(),
+        ))
+
 async def setup(bot):
     await bot.add_cog(Admin(bot))
