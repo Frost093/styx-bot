@@ -17,6 +17,14 @@ bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
 async def hourly_task():
     channel = bot.get_channel(config.CHANNEL_ID) #oohhhhhhhh
     if channel:
+        if random.random() < 0.25:
+            embed = discord.Embed(
+                title="FIRE UP THE:",
+                description="Books of the Chrome!",
+                color=discord.Color.blue()
+            )
+            await channel.send(embed=embed)
+            return
         if random.random() < 0.5:
             embed = discord.Embed(
                 title="FIRE UP THE:",
