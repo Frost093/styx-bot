@@ -17,10 +17,18 @@ bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
 async def hourly_task():
     channel = bot.get_channel(config.CHANNEL_ID) #oohhhhhhhh
     if channel:
-        if random.random() < 0.25:
+        if random.random() < 0.03:
+                embed = discord.Embed(
+                    title="FIRE UP THE:",
+                    description="Notebooks and Chromebooks! \n1/33.33 chance!",
+                    color=discord.Color.gold()
+                )
+                await channel.send(embed=embed)
+                return
+        if random.random() < 0.07:
             embed = discord.Embed(
                 title="FIRE UP THE:",
-                description="Books of the Chrome!",
+                description="Books of the Chromebooks! \n1/14.29 chance!",
                 color=discord.Color.blue()
             )
             await channel.send(embed=embed)
@@ -28,7 +36,7 @@ async def hourly_task():
         if random.random() < 0.5:
             embed = discord.Embed(
                 title="FIRE UP THE:",
-                description="Notebooks!",
+                description="Notebooks! \n1/2 chance!",
                 color=discord.Color.orange()
             )
             await channel.send(embed=embed)
@@ -36,7 +44,7 @@ async def hourly_task():
         
         embed = discord.Embed(
             title="FIRE UP THE:",
-            description="Chromebooks!",
+            description="Chromebooks! \n1/2 chance!",
             color=discord.Color.red()
         )
         await channel.send(embed=embed)
