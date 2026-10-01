@@ -20,7 +20,7 @@ async def hourly_task():
         if random.random() < 0.03:
                 embed = discord.Embed(
                     title="FIRE UP THE:",
-                    description="Notebooks and Chromebooks! \n1/33.33 chance!",
+                    description="Notebooks and Chromebooks! \n(1/33.33 chance: 3%)",
                     color=discord.Color.gold()
                 )
                 await channel.send(embed=embed)
@@ -28,7 +28,7 @@ async def hourly_task():
         if random.random() < 0.07:
             embed = discord.Embed(
                 title="FIRE UP THE:",
-                description="Books of the Chromebooks! \n1/14.29 chance!",
+                description="Books of the Chromebooks! \n(1/14.29 chance: 7%)",
                 color=discord.Color.blue()
             )
             await channel.send(embed=embed)
@@ -36,7 +36,7 @@ async def hourly_task():
         if random.random() < 0.5:
             embed = discord.Embed(
                 title="FIRE UP THE:",
-                description="Notebooks! \n1/2 chance!",
+                description="Notebooks! \n(1/2 chance)",
                 color=discord.Color.orange()
             )
             await channel.send(embed=embed)
@@ -44,7 +44,7 @@ async def hourly_task():
         
         embed = discord.Embed(
             title="FIRE UP THE:",
-            description="Chromebooks! \n1/2 chance!",
+            description="Chromebooks! \n(1/2 chance)",
             color=discord.Color.red()
         )
         await channel.send(embed=embed)
