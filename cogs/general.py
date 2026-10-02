@@ -1,5 +1,6 @@
 import discord
 import random
+from pathlib import Path
 
 from discord.ext import commands
 from datetime import datetime, timezone
@@ -132,7 +133,26 @@ class General(commands.Cog):
     @commands.command()
     async def rand(self, ctx, low: int, high: int):
         result = random.randint(low, high)
-        await ctx.send(f"Random number between {low} and {high}: {result}") # no rig
+        await ctx.send(f"Random number between {low} and {high}: {result}")
 
+    @commands.command(name="kanye")
+    async def kanye_song(self, ctx):
+        filename = Path(__file__).resolve().parent / "kanye_songs.txt"
+
+        try:
+            with filename.open("r", encoding="utf-8") as file:
+                songs = [line.strip() for line in file if line.strip()]
+        except FileNotFoundError:
+            await ctx.send(f"Error: `{filename.name}` was not found on the server.")
+            return
+
+        if not songs:
+            await ctx.send("The song list file is empty!")
+            return
+
+        random_song = random.choice(songs)
+        await ctx.send(f"> {random_song}")
+    
+        
 async def setup(bot):
     await bot.add_cog(General(bot))
