@@ -26,5 +26,17 @@ class Dev(commands.Cog):
             embed = self.deny()
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def dev_embed(self, ctx, title: str, description: str, color: str):
+        if ctx.author.id in DEV_ID:
+            embed = discord.Embed(
+                title=title,
+                description=description,
+                color=discord.Color.from_str(color)
+            )
+        else:
+            embed = self.deny()
+        await ctx.send(embed=embed)
+
 async def setup(bot):
     await bot.add_cog(Dev(bot))

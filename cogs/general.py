@@ -132,7 +132,7 @@ class General(commands.Cog):
     @commands.command()
     async def rand(self, ctx, low: int, high: int):
         result = random.randint(low, high)
-        await ctx.send(f"Random number between {low} and {high}: 73") # always 73 #rigggggeeeedddd
+        await ctx.send(f"Random number between {low} and {high}: {result}") # no rig
 
 async def setup(bot):
     await bot.add_cog(General(bot))
