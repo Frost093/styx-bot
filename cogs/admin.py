@@ -1,6 +1,7 @@
 import discord
 import datetime
 from config import DEV_IDS, DEV_ID
+
 from collections import defaultdict, deque
 from discord.ext import commands
 
@@ -27,7 +28,7 @@ class Admin(commands.Cog):
             return
         if not message.content.startswith("!"):
             self.snipe_history[message.channel.id].appendleft(
-                (message.author, message.content)
+                (message.author, message.content, message.created_at)
             )
 
     @commands.command()
@@ -56,10 +57,10 @@ class Admin(commands.Cog):
         messages = self.snipe_history[ctx.channel.id]
 
         if 1 <= amount <= len(messages):
-            author, content = messages[amount - 1]
+            author, content, created_at = messages[amount - 1]
             embed = discord.Embed(
                 title="Sniped Message",
-                description=f"Author: {author.name} \nContent: {content}",
+                description=f"Author: {author.name} \nContent: {content} \nCreated At: {created_at}",
                 color=discord.Color.yellow()
             )
         else:
@@ -121,5 +122,13 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def sexism(self, ctx):
+        import random
+        if  ctx.author.id in DEV_IDS:
+            await ctx.send(f"{ctx.author.name} is {random.randint(0, 100)}% sexist. No sexism allowed!")
+            return
+        await ctx.send(embed=self.deny())
+        
 async def setup(bot):
     await bot.add_cog(Admin(bot))
