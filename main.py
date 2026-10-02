@@ -18,6 +18,14 @@ bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
 async def hourly_task():
     channel = bot.get_channel(config.CHANNEL_ID) #oohhhhhhhh
     if channel:
+        if random.random() < 0.0001:
+            embed = discord.Embed(
+                title="FIRE UP THE:",
+                description="! \n(1/800 chance: 0.125%)",
+                color=discord.Color.purple()
+            )
+            await channel.send(embed=embed)
+            return
         if random.random() < 0.01:
             embed = discord.Embed(
                 title="FIRE UP THE:",
@@ -79,5 +87,6 @@ async def on_ready():
 
     if not hourly_task.is_running():
         hourly_task.start()
+        print('fall back')
 
 bot.run(TOKEN)

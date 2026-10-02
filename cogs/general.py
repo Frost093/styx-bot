@@ -79,27 +79,31 @@ class General(commands.Cog):
         await ctx.send(random.choice(responses))
 
     @commands.command()
-    async def coinflip(self, ctx, memeber: discord.Member):
-        if discord.Forbidden:
+    async def boop(self, ctx, member: discord.Member):
+        try:
+            embed_boop = discord.Embed(
+                title="Boop!",
+                description=f"Boop! You were booped by {ctx.author.name}!",
+                color=discord.Color.green()
+            )
+            
+            embed = discord.Embed(
+                title="Boop Sent",
+                description=f"Successfully booped {member.display_name} in their DMs!",
+                color=discord.Color.green()
+            )
+            await member.send(embed=embed_boop)
+            await ctx.send(embed=embed)
+            return
+
+        except discord.Forbidden:
             embed = discord.Embed(
                 title="Error",
                 description="Boop failed. (hint: user dms closed, or bot lacks permission)",
                 color=discord.Color.red()
             )
             await ctx.send(embed=embed)
-            return
-        embed_boop = discord.Embed(
-            title="Boop!",
-            description=f"Boop! You were booped by {ctx.author.name}!",
-            color=discord.Color.green()
-        )
-        await memeber.send(embed=embed_boop)
-        embed = discord.Embed(
-            title="Boop Sent",
-            description=f"Successfully booped {memeber.display_name} in their DMs!",
-            color=discord.Color.green()
-        )
-        await ctx.send(embed=embed)
+        
 
     @commands.command()
     async def time(self, ctx):
@@ -119,6 +123,16 @@ class General(commands.Cog):
     @commands.command()
     async def ai(self, ctx):
         await ctx.send(f"{ctx.author.name} is {random.randint(0, 100)}% AI. AI usage is not allowed!")
+
+    @commands.command()
+    async def random(self, ctx, low: int, high: int):
+        result = random.randint(low, high)
+        await ctx.send(f"Random number between {low} and {high}: {result}")
+
+    @commands.command()
+    async def rand(self, ctx, low: int, high: int):
+        result = random.randint(low, high)
+        await ctx.send(f"Random number between {low} and {high}: 73") # always 73 #rigggggeeeedddd
 
 async def setup(bot):
     await bot.add_cog(General(bot))
