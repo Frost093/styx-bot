@@ -21,7 +21,7 @@ async def hourly_task():
         if random.random() < 0.001:
             embed = discord.Embed(
                 title="FIRE UP THE:",
-                description="``` drops from  a heart attack ```\n(1/1000 chance: 0.1%",
+                description="``` drops from  a heart attack ```\n(1/1000 chance: 0.1%)",
                 color=discord.Color.purple()
             )
             await channel.send(embed=embed)
